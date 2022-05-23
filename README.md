@@ -23,3 +23,11 @@
 2. Консистентность данных
 3. Отказоустойчивость
 4. Масштабируемость
+
+## Технологический стек
+1. Desktop App
+2. BackEnd - C++
+3. FrontEnd - QT
+4. Testing - gtest
+5. Db - PostgreSQL
+6. DbAdmin - pgAdmin
