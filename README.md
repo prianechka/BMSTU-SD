@@ -28,7 +28,7 @@
 ![UML](docs/img/prototype.jpg)
 
 ## UML-диаграмма
-![UML](docs/img/UML.jpg)
+![UML](docs/img/uml.jpg)
 
 ## Технологический стек
 1. Desktop App
