@@ -16,10 +16,24 @@
 ![UseCase](docs/img/UseCase.jpg)
 
 ## ER-диаграмма сущностей
-![UseCase](docs/img/ER.jpg)
+![ER](docs/img/ER.jpg)
 
 ## Архитектурные характеристики
 1. Надёжность
 2. Консистентность данных
 3. Отказоустойчивость
 4. Масштабируемость
+
+## Верхнеуровневая диаграмма
+![UML](docs/img/prototype.jpg)
+
+## UML-диаграмма
+![UML](docs/img/uml.jpg)
+
+## Технологический стек
+1. Desktop App
+2. BackEnd - C++
+3. FrontEnd - QT
+4. Testing - gtest
+5. Db - PostgreSQL
+6. DbAdmin - pgAdmin
