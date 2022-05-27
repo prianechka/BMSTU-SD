@@ -9,7 +9,7 @@ ThingController::~ThingController(){}
 
 void ThingController::addThing(int markNumber, std::string thingType)
 {
-    this->repository->addThing(markNumber, thingType);
+    this->repository->addThing(ThingDTO(markNumber, thingType));
 }
 
 std::vector<Thing> ThingController::getThings()
@@ -30,19 +30,22 @@ std::vector<Thing> ThingController::getFreeThings()
     return result;
 }
 
-void ThingController::deleteThing(int id)
+Thing ThingController::getThing(int id)
 {
-    this->repository->deleteThing(id);
+    return this->repository->getThing(id);
 }
 
-Thing ThingController::getThingInfo(int id)
+void ThingController::deleteThing(int id)
 {
-    return this->repository->getThingInfo(id);
+    Thing tmpThing = this->getThing(id);
+    if (tmpThing.getID() >= 0)
+        this->repository->deleteThing(id);
 }
+
 
 int ThingController::getThingRoom(int id)
 {
-    return this->repository->getThingInfo(id).getRoomID();
+    return this->repository->getThing(id).getRoomID();
 }
 
 void ThingController::transferThing(int id, int srcRoomID, int dstRoomID)
@@ -52,5 +55,5 @@ void ThingController::transferThing(int id, int srcRoomID, int dstRoomID)
 
 int ThingController::getCurrentOwner(int id)
 {
-    return this->repository->getThingInfo(id).getOwnerID();
+    return this->repository->getThing(id).getOwnerID();
 }

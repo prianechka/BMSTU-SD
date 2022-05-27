@@ -3,7 +3,7 @@
 
 #include "../objects/student.h"
 #include "../objects/thing.h"
-#include "../db/interfaceStudentRepo.h"
+#include "../db/studentRepo.h"
 #include <vector>
 
 class StudentController
@@ -18,7 +18,7 @@ public:
     void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber);
     std::vector<Student> getAllStudents();
     int getStudentIDByNumber(std::string studentNumber);
-    Student getStudentInfo(int id);
+    Student getStudent(int id);
     int getStudentRoom(int id);
     void evicStudent(int ID);
     void settleStudent(int studentID, int roomID);

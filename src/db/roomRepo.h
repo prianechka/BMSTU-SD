@@ -1,5 +1,5 @@
-#ifndef INTERFACEROOMREPO_H
-#define INTERFACEROOMREPO_H
+#ifndef ROOMREPO_H
+#define ROOMREPO_H
 
 #include <iostream>
 #include <string>
@@ -9,15 +9,12 @@
 
 class InterfaceRoomRepo
 {
-private:
-    int connection;
-
 public:
-    virtual void addRoom(std::string roomType, int roomNumber);
+    virtual void addRoom(RoomDTO room);
     virtual std::vector<Room> getRooms();
-    virtual Room getRoomInfo(int id);
+    virtual Room getRoom(int id);
     virtual std::vector<Thing> getRoomThings(int id);
     virtual void deleteRoom(int id);
 };
 
-#endif // INTERFACEROOMREPO_H
+#endif // ROOMREPO_H

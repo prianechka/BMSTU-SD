@@ -9,7 +9,7 @@ StudentController::~StudentController() {};
 
 void StudentController::addStudent(std::string surname, std::string name, std::string group, std::string studentNumber)
 {
-    this->repository->addStudent(surname, name, group, studentNumber);
+    this->repository->addStudent(StudentDTO(surname, name, group, studentNumber));
 }
 
 std::vector<Student> StudentController::getAllStudents()
@@ -33,14 +33,14 @@ int StudentController::getStudentIDByNumber(std::string studentNumber)
     return result;
 }
 
-Student StudentController::getStudentInfo(int id)
+Student StudentController::getStudent(int id)
 {
-    return this->repository->getStudentInfo(id);
+    return this->repository->getStudent(id);
 }
 
 int StudentController::getStudentRoom(int id)
 {
-    return this->repository->getStudentInfo(id).getRoomID();
+    return this->repository->getStudent(id).getRoomID();
 }
 
 void StudentController::settleStudent(int studentID, int roomID)

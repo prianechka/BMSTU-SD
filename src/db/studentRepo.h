@@ -1,5 +1,5 @@
-#ifndef INTERFACESTUDENTREPO_H
-#define INTERFACESTUDENTREPO_H
+#ifndef STUDENTREPO_H
+#define STUDENTREPO_H
 
 #include "../objects/student.h"
 #include "../objects/thing.h"
@@ -12,13 +12,10 @@ enum transferDirection
 
 class InterfaceStudentRepo
 {
-private:
-    int connection;
 public:
-    virtual void addStudent(std::string surname, std::string name,
-                            std::string group, std::string studentNumber);
+    virtual void addStudent(StudentDTO newStudenttudent);
     virtual std::vector<Student> getAllStudents();
-    virtual Student getStudentInfo(int id);
+    virtual Student getStudent(int id);
     virtual void settleStudent(int studentID, int roomID);
     virtual void evicStudent(int studentID);
     virtual void changeStudentGroup(int studentID, std::string newGroup);
@@ -28,4 +25,4 @@ public:
     virtual std::vector<Thing> getStudentThings(int id);
 };
 
-#endif // INTERFACESTUDENTREPO_H
+#endif // STUDENTREPO_H

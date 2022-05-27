@@ -31,3 +31,19 @@ int Room::getRoomNumber()
 {
     return this->roomNumber;
 }
+
+RoomDTO::RoomDTO(std::string roomType, int roomNumber)
+{
+    this->roomType = roomType;
+    this->roomNumber = roomNumber;
+}
+
+std::string RoomDTO::getRoomType()
+{
+    return this->roomType;
+}
+
+int RoomDTO::getRoomNumber()
+{
+    return this->roomNumber;
+}

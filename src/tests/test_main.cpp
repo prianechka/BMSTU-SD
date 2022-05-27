@@ -5,10 +5,10 @@
 #include "../objects/thing.h"
 #include "../objects/user.h"
 
-#include "../db/interfaceRoomRepo.h"
-#include "../db/interfaceThingRepo.h"
-#include "../db/interfaceStudentRepo.h"
-#include "../db/interfaceUserRepo.h"
+#include "../db/roomRepo.h"
+#include "../db/thingRepo.h"
+#include "../db/studentRepo.h"
+#include "../db/userRepo.h"
 
 #include "../logic/roomController.h"
 #include "../logic/thingController.h"
@@ -22,9 +22,9 @@ private:
 public:
     TestRoomRepo(std::vector<Room> rooms);
     ~TestRoomRepo();
-    void addRoom(std::string roomType, int roomNumber) override;
+    void addRoom(RoomDTO room) override;
     std::vector<Room> getRooms() override;
-    Room getRoomInfo(int id) override;
+    Room getRoom(int id) override;
     void deleteRoom(int id) override;
 };
 
@@ -33,10 +33,10 @@ TestRoomRepo::TestRoomRepo(std::vector<Room> rooms)
     this->rooms = rooms;
 }
 
-void TestRoomRepo::addRoom(std::string roomType, int roomNumber)
+void TestRoomRepo::addRoom(RoomDTO room)
 {
     int N = this->rooms.size();
-    this->rooms.push_back(Room(N + 1, roomType, roomNumber));
+    this->rooms.push_back(Room(N + 1, room.getRoomType(), room.getRoomNumber()));
 }
 
 std::vector<Room> TestRoomRepo::getRooms()
@@ -44,7 +44,7 @@ std::vector<Room> TestRoomRepo::getRooms()
     return this->rooms;
 }
 
-Room TestRoomRepo::getRoomInfo(int id)
+Room TestRoomRepo::getRoom(int id)
 {
     for (Room tmpRoom : this->rooms)
     {
@@ -78,7 +78,7 @@ TEST(TestRoomController, TestAddGetInfo)
     RoomController controller(testRepo);
 
     controller.addRoom("StudentRoom", 532);
-    Room room = controller.getRoomInfo(4);
+    Room room = controller.getRoom(4);
     EXPECT_EQ(room.getID(), 4);
     EXPECT_EQ(room.getRoomNumber(), 532);
     EXPECT_EQ("StudentRoom", room.getRoomType());
@@ -94,7 +94,7 @@ TEST(TestRoomController, TestDelete)
     RoomController controller(testRepo);
 
     controller.deleteRoom(2);
-    Room room = controller.getRoomInfo(2);
+    Room room = controller.getRoom(2);
     ASSERT_EQ(room.getID(), -1);
 }
 
@@ -106,17 +106,18 @@ private:
 public:
     TestThingRepo(std::vector<Thing>);
     ~TestThingRepo();
-    void addThing(int markNumber, std::string type) override;
+    void addThing(ThingDTO thing) override;
     std::vector<Thing> getThings() override;
     void deleteThing(int id) override;
-    Thing getThingInfo(int id) override;
+    Thing getThing(int id) override;
     void transferThing(int id, int srcRoomID, int dstRoomID) override;
 };
 
-void TestThingRepo::addThing(int markNumber, std::string type)
+void TestThingRepo::addThing(ThingDTO thing)
 {
     int N = this->things.size();
-    this->things.push_back(Thing(N + 1, markNumber, std::time(nullptr), type, -1, -1));
+    this->things.push_back(Thing(N + 1, thing.getMarkNumber(), std::time(nullptr),
+                                 thing.getThingType(), NONE, NONE));
 }
 
 std::vector<Thing> TestThingRepo::getThings()
@@ -135,7 +136,7 @@ void TestThingRepo::deleteThing(int id)
     this->things = newThingsArray;
 }
 
-Thing TestThingRepo::getThingInfo(int id)
+Thing TestThingRepo::getThing(int id)
 {
     for (Thing tmpThing : this->things)
     {
@@ -190,7 +191,7 @@ TEST(TestThingController, TestAddInfo)
     ThingController controller(testRepo);
 
     controller.addThing(229, "Bed");
-    Thing tmpThing = controller.getThingInfo(4);
+    Thing tmpThing = controller.getThing(4);
     ASSERT_EQ(tmpThing.getID(), 4);
     ASSERT_EQ(tmpThing.getMarkNumber(), 229);
     ASSERT_EQ(tmpThing.getOwnerID(), -1);
@@ -219,7 +220,7 @@ TEST(TestThingController, TestDelete)
     ThingController controller(testRepo);
 
     controller.deleteThing(2);
-    Thing tmpThing = controller.getThingInfo(4);
+    Thing tmpThing = controller.getThing(4);
     ASSERT_EQ(tmpThing.getID(), -1);
     ASSERT_EQ(tmpThing.getMarkNumber(), -1);
     ASSERT_EQ(tmpThing.getOwnerID(), -1);
@@ -248,9 +249,9 @@ public:
     TestStudentRepo(std::vector<Student> students);
     ~TestStudentRepo();
 
-    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber) override;
+    void addStudent(StudentDTO student) override;
     std::vector<Student> getAllStudents() override;
-    Student getStudentInfo(int id) override;
+    Student getStudent(int id) override;
     void settleStudent(int studentID, int roomID) override;
     void evicStudent(int studentID) override;
     void changeStudentGroup(int studentID, std::string newGroup) override;
@@ -266,11 +267,11 @@ TestStudentRepo::TestStudentRepo(std::vector<Student> students)
     this->students = students;
 }
 
-void TestStudentRepo::addStudent(std::string surname, std::string name, std::string group, std::string studentNumber)
+void TestStudentRepo::addStudent(StudentDTO student)
 {
     int N = this->students.size();
-    this->students.push_back(Student(N + 1, N + 1, name, surname, std::time(nullptr), group,
-                                     studentNumber, NONE));
+    this->students.push_back(Student(N + 1, N + 1, student.getName(), student.getSurname(), std::time(nullptr),
+                                     student.getStudentGroup(), student.getStudentNumber(), NONE));
 }
 
 std::vector<Student> TestStudentRepo::getAllStudents()
@@ -278,7 +279,7 @@ std::vector<Student> TestStudentRepo::getAllStudents()
     return this->students;
 }
 
-Student TestStudentRepo::getStudentInfo(int id)
+Student TestStudentRepo::getStudent(int id)
 {
     for (Student tmpStudent : this->students)
     {
@@ -358,8 +359,8 @@ TEST(TestStudentController, TestAdd)
     TestStudentRepo testRepo(students);
     StudentController controller(testRepo);
 
-    controller.addStudent("Shelia", "Sofa", "IU7-65", "19U622");
-    Student tmpStudent = controller.getStudentInfo(4);
+    controller.addStudent("Sofa", "Shelia", "IU7-65", "19U622");
+    Student tmpStudent = controller.getStudent(4);
 
     ASSERT_EQ(tmpStudent.getID(), 4);
     EXPECT_EQ(tmpStudent.getName(), "Sofa");
@@ -367,7 +368,7 @@ TEST(TestStudentController, TestAdd)
     EXPECT_EQ(tmpStudent.getStudentGroup(), "IU7-65");
     EXPECT_EQ(tmpStudent.getStudentNumber(), "19U622");
 
-    tmpStudent = controller.getStudentInfo(2);
+    tmpStudent = controller.getStudent(2);
     ASSERT_EQ(tmpStudent.getID(), 2);
     EXPECT_EQ(tmpStudent.getName(), "Nik");
     EXPECT_EQ(tmpStudent.getSurname(), "Low");
@@ -386,7 +387,7 @@ TEST(TestStudentController, TestEvic)
     StudentController controller(testRepo);
 
     controller.evicStudent(2);
-    Student tmpStudent = controller.getStudentInfo(2);
+    Student tmpStudent = controller.getStudent(2);
 
     ASSERT_EQ(tmpStudent.getID(), 2);
     ASSERT_EQ(tmpStudent.getRoomID(), NONE);
@@ -404,7 +405,7 @@ TEST(TestStudentController, TestSettle)
 
     controller.evicStudent(2);
     controller.settleStudent(2, 412);
-    Student tmpStudent = controller.getStudentInfo(2);
+    Student tmpStudent = controller.getStudent(2);
 
     ASSERT_EQ(tmpStudent.getID(), 2);
     ASSERT_EQ(tmpStudent.getRoomID(), 412);
@@ -421,7 +422,7 @@ TEST(TestStudentController, TestSmallFunc)
     StudentController controller(testRepo);
 
     controller.addStudent("Shelia", "Sofa", "IU7-65", "19U622");
-    Student tmpStudent = controller.getStudentInfo(4);
+    Student tmpStudent = controller.getStudent(4);
 
     ASSERT_EQ(tmpStudent.getID(), 4);
     ASSERT_EQ(controller.getStudentIDByNumber("19U609"), 1);
@@ -442,9 +443,9 @@ TEST(TestStudentController, TestChange)
     controller.changeStudentName(2, "Nikola");
     controller.changeStudentSurname(2, "Vuich");
 
-    EXPECT_EQ(controller.getStudentInfo(2).getName(), "Nikola");
-    EXPECT_EQ(controller.getStudentInfo(2).getSurname(), "Vuich");
-    EXPECT_EQ(controller.getStudentInfo(2).getStudentGroup(), "IU7-76");
+    EXPECT_EQ(controller.getStudent(2).getName(), "Nikola");
+    EXPECT_EQ(controller.getStudent(2).getSurname(), "Vuich");
+    EXPECT_EQ(controller.getStudent(2).getStudentGroup(), "IU7-76");
 }
 
 class TestUserRepo : public InterfaceUserRepo

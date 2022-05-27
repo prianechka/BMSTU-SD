@@ -2,7 +2,7 @@
 #define USERCONTROLLER_H
 
 #include "../objects/user.h"
-#include "../db/interfaceUserRepo.h"
+#include "../db/userRepo.h"
 
 class UserController
 {

@@ -20,4 +20,17 @@ public:
     int getRoomNumber();
 };
 
+class RoomDTO
+{
+private:
+    std::string roomType;
+    int roomNumber;
+public:
+    RoomDTO(std::string roomType, int roomNumber);
+    ~RoomDTO() = default;
+
+    std::string getRoomType();
+    int getRoomNumber();
+};
+
 #endif // ROOM_H

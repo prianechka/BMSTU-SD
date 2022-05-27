@@ -1,5 +1,5 @@
-#ifndef INTERFACEUSERREPO_H
-#define INTERFACEUSERREPO_H
+#ifndef USERREPO_H
+#define USERREPO_H
 
 #include <iostream>
 #include <string>
@@ -7,13 +7,10 @@
 
 class InterfaceUserRepo
 {
-private:
-    int connection;
-
 public:
     virtual int getUserId(std::string login);
     virtual User getUser(int id);
     virtual void addUser(std::string login, std::string password, Levels privelegeLevel);
 };
 
-#endif // INTERFACEUSERREPO_H
+#endif // USERREPO_H

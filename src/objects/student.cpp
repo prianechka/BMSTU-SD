@@ -77,3 +77,31 @@ void Student::setSurname(std::string newSurname)
 {
     this->surname = newSurname;
 }
+
+StudentDTO::StudentDTO(std::string name, std::string surname, std::string studentGroup, std::string studentNumber)
+{
+    this->name = name;
+    this->surname = surname;
+    this->studentGroup = studentGroup;
+    this->studentNumber = studentNumber;
+}
+
+std::string StudentDTO::getName()
+{
+    return this->name;
+}
+
+std::string StudentDTO::getSurname()
+{
+    return this->surname;
+}
+
+std::string StudentDTO::getStudentGroup()
+{
+    return this->studentGroup;
+}
+
+std::string StudentDTO::getStudentNumber()
+{
+    return this->studentNumber;
+}

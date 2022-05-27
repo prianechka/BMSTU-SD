@@ -1,15 +1,16 @@
 #ifndef PGSTUDENTREPO_H
 #define PGSTUDENTREPO_H
 
-#include "interfaceStudentRepo.h"
+#include "studentRepo.h"
 
 class PgStudentRepo : public InterfaceStudentRepo
 {
+private:
+    int connection;
 public:
-    void addStudent(std::string surname, std::string name,
-                            std::string group, std::string studentNumber) override;
+    void addStudent(StudentDTO newStudenttudent) override;
     std::vector<Student> getAllStudents() override;
-    Student getStudentInfo(int id) override;
+    Student getStudent(int id) override;
     void settleStudent(int studentID, int roomID) override;
     void evicStudent(int studentID) override;
     void changeStudentGroup(int studentID, std::string newGroup) override;

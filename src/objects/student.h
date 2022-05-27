@@ -6,6 +6,7 @@
 #include <string>
 #include <ctime>
 
+
 class Student
 {
 private:
@@ -36,6 +37,24 @@ public:
     void setGroup(std::string newGroup);
     void setName(std::string newName);
     void setSurname(std::string newSurname);
+};
+
+class StudentDTO
+{
+private:
+    std::string name;
+    std::string surname;
+    std::string studentGroup;
+    std::string studentNumber;
+
+public:
+    StudentDTO(std::string name, std::string surname, std::string studentGroup, std::string studentNumber);
+    ~StudentDTO() = default;
+
+    std::string getStudentGroup();
+    std::string getStudentNumber();
+    std::string getName();
+    std::string getSurname();
 };
 
 #endif // STUDENT_H

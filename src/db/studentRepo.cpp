@@ -1,6 +1,6 @@
-#include "interfaceStudentRepo.h"
+#include "studentRepo.h"
 
-void InterfaceStudentRepo::addStudent(std::string surname, std::string name, std::string group, std::string studentNumber)
+void InterfaceStudentRepo::addStudent(StudentDTO student)
 {}
 
 void InterfaceStudentRepo::changeStudentGroup(int studentID, std::string newGroup)
@@ -21,7 +21,7 @@ void InterfaceStudentRepo::settleStudent(int studentID, int roomID)
 std::vector<Student> InterfaceStudentRepo::getAllStudents()
 {}
 
-Student InterfaceStudentRepo::getStudentInfo(int id)
+Student InterfaceStudentRepo::getStudent(int id)
 {}
 
 std::vector<Thing> InterfaceStudentRepo::getStudentThings(int id)

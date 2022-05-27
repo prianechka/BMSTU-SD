@@ -3,7 +3,7 @@
 
 #include "../objects/room.h"
 #include "../objects/thing.h"
-#include "../db/interfaceRoomRepo.h"
+#include "../db/roomRepo.h"
 
 class RoomController
 {
@@ -15,7 +15,7 @@ public:
 
     void addRoom(std::string roomType, int number);
     std::vector<Room> getRooms();
-    Room getRoomInfo(int id);
+    Room getRoom(int id);
     void deleteRoom(int id);
     std::vector<Thing> getRoomThings(int id);
 };

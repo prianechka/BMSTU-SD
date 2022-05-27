@@ -27,4 +27,17 @@ public:
     int getMarkNumber();
 };
 
+class ThingDTO
+{
+private:
+    int markNumber;
+    std::string thingType;
+public:
+    ThingDTO(int markNumber, std::string thingType);
+    ~ThingDTO() = default;
+
+    std::string getThingType();
+    int getMarkNumber();
+};
+
 #endif // THING_H

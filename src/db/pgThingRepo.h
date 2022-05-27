@@ -1,15 +1,17 @@
 #ifndef PGTHINGREPO_H
 #define PGTHINGREPO_H
 
-#include "interfaceThingRepo.h"
+#include "thingRepo.h"
 
 class PgThingRepo : public InterfaceThingRepo
 {
+private:
+    int connection;
 public:
-    void addThing(int markNumber, std::string type) override;
+    void addThing(ThingDTO thing) override;
     std::vector<Thing> getThings() override;
     void deleteThing(int id) override;
-    Thing getThingInfo(int id) override;
+    Thing getThing(int id) override;
     void transferThing(int id, int srcRoomID, int dstRoomID) override;
 };
 

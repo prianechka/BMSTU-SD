@@ -52,3 +52,19 @@ void Thing::setRoomID(int newID)
 {
     this->roomID = newID;
 }
+
+ThingDTO::ThingDTO(int markNumber, std::string thingType)
+{
+    this->markNumber = markNumber;
+    this->thingType = thingType;
+}
+
+int ThingDTO::getMarkNumber()
+{
+    return this->markNumber;
+}
+
+std::string ThingDTO::getThingType()
+{
+    return this->thingType;
+}

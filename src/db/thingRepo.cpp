@@ -1,12 +1,12 @@
-#include "interfaceThingRepo.h"
+#include "thingRepo.h"
 
-void InterfaceThingRepo::addThing(int markNumber, std::string type)
+void InterfaceThingRepo::addThing(ThingDTO thing)
 {}
 
 void InterfaceThingRepo::deleteThing(int id)
 {}
 
-Thing InterfaceThingRepo::getThingInfo(int id)
+Thing InterfaceThingRepo::getThing(int id)
 {}
 
 void InterfaceThingRepo::transferThing(int id, int srcRoomID, int dstRoomID)
