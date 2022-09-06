@@ -10,6 +10,11 @@
 #include "../db/studentRepo.h"
 #include "../db/userRepo.h"
 
+#include "../db/pgRoomRepo.h"
+#include "../db/pgThingRepo.h"
+#include "../db/pgStudentRepo.h"
+#include "../db/pgUserRepo.h"
+
 #include "../logic/roomController.h"
 #include "../logic/thingController.h"
 #include "../logic/studentController.h"
@@ -249,14 +254,11 @@ public:
     TestStudentRepo(std::vector<Student> students);
     ~TestStudentRepo();
 
-    void addStudent(StudentDTO student) override;
+    void addStudent(StudentDTO student, int webID) override;
     std::vector<Student> getAllStudents() override;
     Student getStudent(int id) override;
-    void settleStudent(int studentID, int roomID) override;
-    void evicStudent(int studentID) override;
-    void changeStudentGroup(int studentID, std::string newGroup) override;
-    void changeStudentName(int studentID, std::string newName) override;
-    void changeStudentSurname(int studentID, std::string newSurname) override;
+    void transferStudent(int studentID, int roomID, transferDirection direct) override;
+    void changeStudent(int studentID, StudentDTO studentInfo) override;
 };
 
 TestStudentRepo::~TestStudentRepo()
@@ -267,10 +269,10 @@ TestStudentRepo::TestStudentRepo(std::vector<Student> students)
     this->students = students;
 }
 
-void TestStudentRepo::addStudent(StudentDTO student)
+void TestStudentRepo::addStudent(StudentDTO student, int webID)
 {
     int N = this->students.size();
-    this->students.push_back(Student(N + 1, N + 1, student.getName(), student.getSurname(), std::time(nullptr),
+    this->students.push_back(Student(N + 1, webID, student.getName(), student.getSurname(), std::time(nullptr),
                                      student.getStudentGroup(), student.getStudentNumber(), NONE));
 }
 
@@ -289,65 +291,40 @@ Student TestStudentRepo::getStudent(int id)
     return Student();
 }
 
-void TestStudentRepo::settleStudent(int studentID, int roomID)
+void TestStudentRepo::transferStudent(int studentID, int roomID, transferDirection direct)
 {
     std::vector<Student> newArrayStudents;
     for (Student tmpStudent : this->students)
     {
         if (tmpStudent.getID() == studentID)
-            tmpStudent.setRoomID(roomID);
+        {
+            if ((direct == RET) && (roomID == tmpStudent.getRoomID()))
+                tmpStudent.setRoomID(NONE);
+            else if ((direct == GET) && (tmpStudent.getRoomID() == NONE))
+                tmpStudent.setRoomID(roomID);
+        }
         newArrayStudents.push_back(tmpStudent);
     }
     this->students = newArrayStudents;
 }
 
-void TestStudentRepo::evicStudent(int studentID)
+
+void TestStudentRepo::changeStudent(int studentID, StudentDTO studentInfo)
 {
     std::vector<Student> newArrayStudents;
     for (Student tmpStudent : this->students)
     {
         if (tmpStudent.getID() == studentID)
-            tmpStudent.setRoomID(-1);
+        {
+            tmpStudent.setName(studentInfo.getName());
+            tmpStudent.setSurname(studentInfo.getSurname());
+            tmpStudent.setGroup(studentInfo.getStudentGroup());
+        }
         newArrayStudents.push_back(tmpStudent);
     }
     this->students = newArrayStudents;
 }
 
-void TestStudentRepo::changeStudentGroup(int studentID, std::string newGroup)
-{
-    std::vector<Student> newArrayStudents;
-    for (Student tmpStudent : this->students)
-    {
-        if (tmpStudent.getID() == studentID)
-            tmpStudent.setGroup(newGroup);
-        newArrayStudents.push_back(tmpStudent);
-    }
-    this->students = newArrayStudents;
-}
-
-void TestStudentRepo::changeStudentName(int studentID, std::string newName)
-{
-    std::vector<Student> newArrayStudents;
-    for (Student tmpStudent : this->students)
-    {
-        if (tmpStudent.getID() == studentID)
-            tmpStudent.setName(newName);
-        newArrayStudents.push_back(tmpStudent);
-    }
-    this->students = newArrayStudents;
-}
-
-void TestStudentRepo::changeStudentSurname(int studentID, std::string newSurname)
-{
-    std::vector<Student> newArrayStudents;
-    for (Student tmpStudent : this->students)
-    {
-        if (tmpStudent.getID() == studentID)
-            tmpStudent.setSurname(newSurname);
-        newArrayStudents.push_back(tmpStudent);
-    }
-    this->students = newArrayStudents;
-}
 
 TEST(TestStudentController, TestAdd)
 {
@@ -359,7 +336,7 @@ TEST(TestStudentController, TestAdd)
     TestStudentRepo testRepo(students);
     StudentController controller(testRepo);
 
-    controller.addStudent("Sofa", "Shelia", "IU7-65", "19U622");
+    controller.addStudent("Sofa", "Shelia", "IU7-65", "19U622", 4);
     Student tmpStudent = controller.getStudent(4);
 
     ASSERT_EQ(tmpStudent.getID(), 4);
@@ -421,7 +398,7 @@ TEST(TestStudentController, TestSmallFunc)
     TestStudentRepo testRepo(students);
     StudentController controller(testRepo);
 
-    controller.addStudent("Shelia", "Sofa", "IU7-65", "19U622");
+    controller.addStudent("Shelia", "Sofa", "IU7-65", "19U622", 4);
     Student tmpStudent = controller.getStudent(4);
 
     ASSERT_EQ(tmpStudent.getID(), 4);
@@ -525,9 +502,139 @@ TEST(TestUserController, TestGetInfo)
     ASSERT_EQ(tmpUser.getUserLevel(), STUDENT);
 }
 
+// Тесты написанных репозиториев
 
-int main(int argc, char *argv[])
+TEST(TestPgUserRepo, TestGetInfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgUserRepo rep = PgUserRepo(connectParams);
+    UserController controller(rep);
+
+    User tmpUser = controller.getUser(controller.getUserId("prianechka"));
+    ASSERT_EQ(tmpUser.getId(), 1);
+    ASSERT_EQ(tmpUser.getUserLevel(), STUDENT);
+}
+
+TEST(TestPgUserRepo, TestAdd)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgUserRepo rep = PgUserRepo(connectParams);
+    UserController controller(rep);
+
+    controller.addUser("sysch", "1234", COMEND);
+    User tmpUser = controller.getUser(controller.getUserId("sysch"));
+    ASSERT_EQ(tmpUser.getUserLevel(), COMEND);
+    ASSERT_EQ(tmpUser.getLogin(), "sysch");
+}
+
+TEST(TestPgStudentRepo, TestGetInfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgStudentRepo rep = PgStudentRepo(connectParams);
+    StudentController controller(rep);
+
+    int tmpID = controller.getStudentIDByNumber("19У609");
+    Student tmpStudent = controller.getStudent(tmpID);
+    ASSERT_EQ(tmpStudent.getName(), "Саша");
+    ASSERT_EQ(tmpStudent.getSurname(), "Прянишников");
+    ASSERT_EQ(tmpStudent.getRoomID(), 2);
+    ASSERT_EQ(tmpStudent.getStudentGroup(), "ИУ7-75Б");
+}
+
+TEST(TestPgStudentRepo, TestChangeinfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgStudentRepo rep = PgStudentRepo(connectParams);
+    StudentController controller(rep);
+
+    int tmpID = controller.getStudentIDByNumber("19У609");
+    controller.changeStudentGroup(tmpID, "ИУ7-75Б");
+    controller.changeStudentName(tmpID, "Саша");
+
+    Student tmpStudent = controller.getStudent(tmpID);
+    ASSERT_EQ(tmpStudent.getName(), "Саша");
+    ASSERT_EQ(tmpStudent.getSurname(), "Прянишников");
+    ASSERT_EQ(tmpStudent.getRoomID(), 2);
+    ASSERT_EQ(tmpStudent.getStudentGroup(), "ИУ7-75Б");
+}
+
+TEST(TestPgStudentRepo, TestEvic)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgStudentRepo rep = PgStudentRepo(connectParams);
+    StudentController controller(rep);
+
+    int tmpID = controller.getStudentIDByNumber("18У719");
+    controller.evicStudent(tmpID);
+    controller.settleStudent(tmpID, 3);
+
+    Student tmpStudent = controller.getStudent(tmpID);
+    ASSERT_EQ(tmpStudent.getName(), "Артём");
+    ASSERT_EQ(tmpStudent.getSurname(), "Богаченко");
+    ASSERT_EQ(tmpStudent.getRoomID(), 3);
+    ASSERT_EQ(tmpStudent.getStudentGroup(), "ИУ7-65Б");
+}
+
+TEST(TestPgRoomRepo, TestGetInfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgRoomRepo rep = PgRoomRepo(connectParams);
+    RoomController controller(rep);
+
+    Room tmpRoom = controller.getRoom(2);
+    ASSERT_EQ(tmpRoom.getRoomNumber(), 628);
+    ASSERT_EQ(tmpRoom.getRoomType(), "Комната");
+
+    tmpRoom = controller.getRoom(8);
+    ASSERT_EQ(tmpRoom.getRoomNumber(), 2);
+    ASSERT_EQ(tmpRoom.getRoomType(), "Склад");
+}
+
+TEST(TestPgRoomRepo, TestRoomThings)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgRoomRepo rep = PgRoomRepo(connectParams);
+    RoomController controller(rep);
+
+    std::vector<Thing> things = controller.getRoomThings(2);
+    ASSERT_EQ(things.size(), 2);
+    ASSERT_EQ(things[0].getRoomID(), 2);
+    ASSERT_EQ(things[0].getThingType(), "Стол");
+}
+
+TEST(TestPgThingRepo, TestGetInfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgThingRepo rep = PgThingRepo(connectParams);
+    ThingController controller(rep);
+
+    Thing tmpThing = controller.getThing(2);
+    ASSERT_EQ(tmpThing.getMarkNumber(), 2);
+    ASSERT_EQ(tmpThing.getThingType(), "Стол");
+    ASSERT_EQ(tmpThing.getRoomID(), 2);
+    ASSERT_EQ(tmpThing.getOwnerID(), 1);
+    ASSERT_EQ(controller.getCurrentOwner(2), 1);
+    ASSERT_EQ(controller.getThingRoom(2), 2);
+}
+
+TEST(TestPgThingRepo, TestFreeInfo)
+{
+    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    PgThingRepo rep = PgThingRepo(connectParams);
+    ThingController controller(rep);
+
+    std::vector<Thing> tmpThings = controller.getFreeThings();
+    ASSERT_EQ(tmpThings.size(), 1);
+    ASSERT_EQ(tmpThings[0].getOwnerID(), -1);
+}
+
+int test_main(int argc, char *argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
+}
+
+int main(int argc, char *argv[])
+{
+    test_main(argc, argv);
 }

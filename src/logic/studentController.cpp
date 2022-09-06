@@ -7,9 +7,10 @@ StudentController::StudentController(InterfaceStudentRepo &repository)
 
 StudentController::~StudentController() {};
 
-void StudentController::addStudent(std::string surname, std::string name, std::string group, std::string studentNumber)
+void StudentController::addStudent(std::string surname, std::string name, std::string group,
+                                   std::string studentNumber, int webID)
 {
-    this->repository->addStudent(StudentDTO(surname, name, group, studentNumber));
+    this->repository->addStudent(StudentDTO(surname, name, group, studentNumber), webID);
 }
 
 std::vector<Student> StudentController::getAllStudents()
@@ -47,29 +48,41 @@ void StudentController::settleStudent(int studentID, int roomID)
 {
     int tmpRoom = this->getStudentRoom(studentID);
     if (tmpRoom == NONE)
-        this->repository->settleStudent(studentID, roomID);
+        this->repository->transferStudent(studentID, roomID, GET);
 }
 
-void StudentController::evicStudent(int id)
+void StudentController::evicStudent(int studentID)
 {
-    int tmpRoom = this->getStudentRoom(id);
+    int tmpRoom = this->getStudentRoom(studentID);
     if (tmpRoom > 0)
-        this->repository->evicStudent(id);
+        this->repository->transferStudent(studentID, tmpRoom, RET);
 }
 
 void StudentController::changeStudentGroup(int id, std::string newGroup)
 {
-    this->repository->changeStudentGroup(id, newGroup);
+    Student tmpStudent = this->getStudent(id);
+    StudentDTO tmpDTO = StudentDTO(tmpStudent.getName(), tmpStudent.getSurname(),
+                                   newGroup, tmpStudent.getStudentNumber());
+
+    this->repository->changeStudent(id, tmpDTO);
 }
 
 void StudentController::changeStudentName(int id, std::string newName)
 {
-    this->repository->changeStudentName(id, newName);
+    Student tmpStudent = this->getStudent(id);
+    StudentDTO tmpDTO = StudentDTO(newName, tmpStudent.getSurname(),
+                                   tmpStudent.getStudentGroup(), tmpStudent.getStudentNumber());
+
+    this->repository->changeStudent(id, tmpDTO);
 }
 
 void StudentController::changeStudentSurname(int id, std::string newSurname)
 {
-    this->repository->changeStudentSurname(id, newSurname);
+    Student tmpStudent = this->getStudent(id);
+    StudentDTO tmpDTO = StudentDTO(tmpStudent.getName(), newSurname,
+                                   tmpStudent.getStudentGroup(), tmpStudent.getStudentNumber());
+
+    this->repository->changeStudent(id, tmpDTO);
 }
 
 std::vector<Thing> StudentController::getStudentThings(int id)

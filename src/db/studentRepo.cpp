@@ -1,21 +1,16 @@
 #include "studentRepo.h"
 
-void InterfaceStudentRepo::addStudent(StudentDTO student)
+void InterfaceStudentRepo::addStudent(StudentDTO student, int webID)
 {}
 
-void InterfaceStudentRepo::changeStudentGroup(int studentID, std::string newGroup)
+int InterfaceStudentRepo::getStudentID(std::string studentNumber)
 {}
 
-void InterfaceStudentRepo::changeStudentName(int studentID, std::string newName)
+void InterfaceStudentRepo::changeStudent(int studentID, StudentDTO studentInfo)
 {}
 
-void InterfaceStudentRepo::changeStudentSurname(int studentID, std::string newSurname)
-{}
 
-void InterfaceStudentRepo::evicStudent(int studentID)
-{}
-
-void InterfaceStudentRepo::settleStudent(int studentID, int roomID)
+void InterfaceStudentRepo::transferStudent(int studentID, int roomID, transferDirection direct)
 {}
 
 std::vector<Student> InterfaceStudentRepo::getAllStudents()

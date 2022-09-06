@@ -15,7 +15,7 @@ public:
     StudentController(InterfaceStudentRepo &repository);
     ~StudentController();
 
-    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber);
+    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber, int webID);
     std::vector<Student> getAllStudents();
     int getStudentIDByNumber(std::string studentNumber);
     Student getStudent(int id);
