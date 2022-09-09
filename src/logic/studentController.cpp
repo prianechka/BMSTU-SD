@@ -5,12 +5,14 @@ StudentController::StudentController(InterfaceStudentRepo &repository)
     this->repository = &repository;
 }
 
+StudentController::StudentController(){}
+
 StudentController::~StudentController() {};
 
 void StudentController::addStudent(std::string surname, std::string name, std::string group,
                                    std::string studentNumber, int webID)
 {
-    this->repository->addStudent(StudentDTO(surname, name, group, studentNumber), webID);
+    this->repository->addStudent(StudentDTO(name, surname, group, studentNumber), webID);
 }
 
 std::vector<Student> StudentController::getAllStudents()

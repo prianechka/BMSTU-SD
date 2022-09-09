@@ -135,6 +135,29 @@ void PgThingRepo::transferThing(int id, int srcRoomID, int dstRoomID)
     }
 }
 
+int PgThingRepo::getThingIDByMarkNumber(int markNumber)
+{
+    int id = NONE;
+    try
+    {
+        if (this->connection->is_open())
+        {
+            std::string sql = PostgreSQLGetThing().get_text(markNumber);
+            pqxx::work curConnect(*this->connection);
+            pqxx::result result = curConnect.exec(sql);
+            if (result.size() > 0)
+                id = result[0][0].as<int>();
+            curConnect.commit();
+        }
+        else
+            throw DatabaseConnectException(__FILE__, typeid(*this).name(), __LINE__);
+    }
+    catch (const std::exception &e)
+    {
+          std::cout << e.what() << std::endl;
+    }
+    return id;
+}
 
 /*
 int main()

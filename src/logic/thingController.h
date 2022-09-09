@@ -11,12 +11,14 @@ private:
     InterfaceThingRepo *repository;
 public:
     ThingController(InterfaceThingRepo &repository);
+    ThingController();
     ~ThingController();
 
     void addThing(int markNumber, std::string thingType);
     std::vector<Thing> getThings();
     std::vector<Thing> getFreeThings();
     Thing getThing(int id);
+    int getThingIDByMarkNumber(int markNumber);
     void deleteThing(int id);
     int getThingRoom(int id);
     void transferThing(int id, int srcRoomID, int dstRoomID);

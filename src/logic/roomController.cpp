@@ -5,6 +5,8 @@ RoomController::RoomController(InterfaceRoomRepo &repository)
     this->Repository = &repository;
 }
 
+RoomController::RoomController() {}
+
 RoomController::~RoomController(){}
 
 void RoomController::addRoom(std::string roomType, int number)

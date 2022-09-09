@@ -10,12 +10,13 @@ std::string PostgreSQLChangeStudent::get_text(int studentID, StudentDTO studentI
 
 std::string PostgreSQLAddStudent::get_text(StudentDTO newStudent, int webID)
 {
-    return "INSERT INTO PPO.Student(studentname, studentsurname, studentgroup,\
+    std::string result = "INSERT INTO PPO.Student(studentname, studentsurname, studentgroup,\
             studentnumber, settledate, webaccid) VALUES ('"+
             newStudent.getName() + "', '" + newStudent.getSurname() +
             "', '" + newStudent.getStudentGroup() + "', '" +
             newStudent.getStudentNumber() + "', current_date, " +
             std::to_string(webID) + ");";
+    return result;
 }
 
 std::string PostgreSQLGetAllStudents::get_text()
@@ -36,7 +37,7 @@ std::string PostgreSQLGetStudent::get_text(int id)
     return "SELECT S.studentid, S.webaccid, S.studentname, S.studentsurname,"\
                       "S.settledate, S.studentgroup, S.studentnumber,"\
                       "PPO.FindStudentRoom(S.studentid) "\
-                      "FROM PPO.Student as S WHERE StudentID = " + std::to_string(id) + ";";
+                      "FROM PPO.Student as S WHERE S.studentid = " + std::to_string(id) + ";";
 }
 
 std::string PostgreSQLTransferStudent::get_text(int studentID, int roomID, transferDirection direct)
@@ -109,7 +110,7 @@ std::string PostgreSQLAddThing::get_text(ThingDTO thing)
 std::string PostgreSQLGetThing::get_text(int id)
 {
     return "SELECT T.thingid, T.marknumber, T.creationdate, T.thingtype, PPO.FindStudent(T.thingId),"\
-            "PPO.FindRoom(T.thingid) FROM PPO.Thing as T WHERE T.ThingID = " + std::to_string(id) + ";";
+            "PPO.FindRoom(T.thingid) FROM PPO.Thing as T WHERE T.thingid = " + std::to_string(id) + ";";
 }
 
 std::string PostgreSQLGetThings::get_text()

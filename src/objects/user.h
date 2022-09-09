@@ -7,7 +7,7 @@
 
 enum Levels
 {
-    NOT_AUTH = 0,
+    NON_AUTH = 0,
     STUDENT = 1,
     SUPPLY = 2,
     COMEND = 3
@@ -27,6 +27,7 @@ public:
     ~User();
     Levels getUserLevel();
     std::string getLogin();
+    std::string getPassword();
     int getId();
 };
 

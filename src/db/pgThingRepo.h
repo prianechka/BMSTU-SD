@@ -20,6 +20,7 @@ public:
     void deleteThing(int id) override;
     Thing getThing(int id) override;
     void transferThing(int id, int srcRoomID, int dstRoomID) override;
+    int getThingIDByMarkNumber(int markNumber) override;
 };
 
 #endif // PGTHINGREPO_H

@@ -5,6 +5,8 @@ ThingController::ThingController(InterfaceThingRepo &repository)
     this->repository = &repository;
 }
 
+ThingController::ThingController() {}
+
 ThingController::~ThingController(){}
 
 void ThingController::addThing(int markNumber, std::string thingType)
@@ -24,7 +26,7 @@ std::vector<Thing> ThingController::getFreeThings()
 
     for (Thing tmpThing : allThings)
     {
-        if (tmpThing.getRoomID() == -1)
+        if (tmpThing.getOwnerID() == -1)
             result.push_back(tmpThing);
     }
     return result;
@@ -50,10 +52,17 @@ int ThingController::getThingRoom(int id)
 
 void ThingController::transferThing(int id, int srcRoomID, int dstRoomID)
 {
+    if (srcRoomID == NONE)
+        srcRoomID = NOT_FOUND;
     this->repository->transferThing(id, srcRoomID, dstRoomID);
 }
 
 int ThingController::getCurrentOwner(int id)
 {
     return this->repository->getThing(id).getOwnerID();
+}
+
+int ThingController::getThingIDByMarkNumber(int markNumber)
+{
+    return this->repository->getThingIDByMarkNumber(markNumber);
 }

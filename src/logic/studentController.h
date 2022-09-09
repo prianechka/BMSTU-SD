@@ -13,6 +13,7 @@ private:
 
 public:
     StudentController(InterfaceStudentRepo &repository);
+    StudentController();
     ~StudentController();
 
     void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber, int webID);

@@ -5,7 +5,15 @@ UserController::UserController(InterfaceUserRepo &repository)
     this->repository = &repository;
 }
 
+UserController::UserController()
+{}
+
 UserController::~UserController(){}
+
+UserController::UserController(UserController &controller)
+{
+    this->repository = controller.repository;
+}
 
 int UserController::getUserId(std::string login)
 {

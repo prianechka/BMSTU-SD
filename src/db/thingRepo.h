@@ -12,6 +12,7 @@ public:
     virtual void deleteThing(int id);
     virtual Thing getThing(int id);
     virtual void transferThing(int id, int srcRoomID, int dstRoomID);
+    virtual int getThingIDByMarkNumber(int markNumber);
 };
 
 #endif // THINGREPO_H

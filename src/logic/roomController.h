@@ -11,6 +11,7 @@ private:
     InterfaceRoomRepo *Repository;
 public:
     RoomController(InterfaceRoomRepo &Repository);
+    RoomController();
     ~RoomController();
 
     void addRoom(std::string roomType, int number);
