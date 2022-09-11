@@ -12,7 +12,7 @@ public:
     AuthManager(UserController &controller);
     AuthManager();
     ~AuthManager() = default;
-    bool isAuthorized();
+    bool isAuthorized(std::string login);
     Levels TryToAuthorize();
     int GetUserID(std::string login);
 private:

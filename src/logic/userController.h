@@ -3,6 +3,7 @@
 
 #include "../objects/user.h"
 #include "../db/userRepo.h"
+#include "../db/exceptions.h"
 
 class UserController
 {

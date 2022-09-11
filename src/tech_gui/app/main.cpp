@@ -1,6 +1,6 @@
 #include "app.h"
 
-/*
+
 int main()
 {
     ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
@@ -28,4 +28,3 @@ int main()
     for (;;)
         app.menu();
 }
-*/

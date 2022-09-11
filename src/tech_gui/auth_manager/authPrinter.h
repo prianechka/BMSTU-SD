@@ -3,12 +3,7 @@
 
 #include <iostream>
 #include <string>
-
-const std::string LOGIN_MESSAGE = "Введите логин: ";
-const std::string PASSWORD_MESSAGE = "Введите пароль: ";
-const std::string LOGIN_ERROR = "\nТакого логина не существует!\n";
-const std::string PASSWORD_ERROR = "\nПароль введен неверно!\n";
-const std::string OK = "\nАвторизация прошла успешно!";
+#include "../../objects/consts.h"
 
 class AuthPrinter
 {
@@ -20,6 +15,7 @@ public:
     void print_error_login();
     void print_error_password();
     void print_ok();
+    void printException(const std::exception &e);
 };
 
 #endif // AUTHPRINTER_H

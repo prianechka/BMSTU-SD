@@ -9,7 +9,7 @@ void StudentPrinter::printStudent(Student tmpStudent)
 
 void StudentPrinter::printStudentRoom(int number)
 {
-    if (number == NONE)
+    if (number == NOT_LIVING)
         std::cout << "Не проживает в общежитии" << std::endl;
     else
         std::cout << "Проживает в комнате " << number << std::endl;
@@ -43,7 +43,7 @@ void StudentPrinter::printInputStudentNumber()
 
 void StudentPrinter::printInputLogin()
 {
-    std::cout << LOG_INPUT_MESSAGE;
+    std::cout << LOGIN_INPUT_MESSAGE;
 }
 
 void StudentPrinter::printInputPassword()
@@ -53,51 +53,30 @@ void StudentPrinter::printInputPassword()
 
 void StudentPrinter::printIDRoom()
 {
-    std::cout << ID_ROOM_INPUT;
-}
-
-void StudentPrinter::printEvicError()
-{
-    std::cout << EVIC_ERROR;
-}
-
-void StudentPrinter::printSettleError()
-{
-    std::cout << SETTLE_ERROR;
-}
-
-void StudentPrinter::printThingNotFound()
-{
-    std::cout << THING_NOT_FOUND;
-}
-
-
-void StudentPrinter::printGiveError()
-{
-    std::cout << GIVE_ERROR;
+    std::cout << ID_ROOM_INPUT_MESSAGE;
 }
 
 void StudentPrinter::printGiveOK()
 {
-    std::cout << GIVE_OK;
-}
-
-void StudentPrinter::printReturnError()
-{
-    std::cout << RETURN_ERROR;
+    std::cout << GIVE_THING_OK;
 }
 
 void StudentPrinter::printReturnOK()
 {
-    std::cout << RETURN_OK;
-}
-
-void StudentPrinter::printStudentNotFound()
-{
-    std::cout << STUDENT_NOT_FOUND;
+    std::cout << RETURN_THING_OK;
 }
 
 void StudentPrinter::printMarkNumInput()
 {
-    std::cout << MARK_NUM_INPUT;
+    std::cout << MARK_NUM_INPUT_MESSAGE;
+}
+
+void StudentPrinter::printEvicOK()
+{
+    std::cout << EVIC_STUDENT_GOOD;
+}
+
+void StudentPrinter::printException(const std::exception &e)
+{
+    std::cout << e.what() << std::endl;
 }

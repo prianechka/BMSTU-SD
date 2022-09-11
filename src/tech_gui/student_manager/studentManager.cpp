@@ -35,10 +35,14 @@ void StudentManager::addNewStudent()
     this->printer.printInputPassword();
     std::string password = this->getter.getString();
 
-    this->userController.addUser(login, password, STUDENT);
-    int id = this->userController.getUserId(login);
-    if (id != NONE)
-        this->studentController.addStudent(name, surname, group, studNumber, id);
+    try
+    {
+        this->userController.addUser(login, password, STUDENT);
+    }
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::viewStudent()
@@ -46,16 +50,21 @@ void StudentManager::viewStudent()
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
 
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        Student tmpStudent = this->studentController.getStudent(tmpID);
-        Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
-        this->printer.printStudent(tmpStudent);
-        this->printer.printStudentRoom(studentRoom.getRoomNumber());
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
+        {
+            Student tmpStudent = this->studentController.getStudent(tmpID);
+            Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
+            this->printer.printStudent(tmpStudent);
+            this->printer.printStudentRoom(studentRoom.getRoomNumber());
+        }
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::viewAllStudent()
@@ -69,15 +78,20 @@ void StudentManager::changeStudentInfo()
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
 
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        this->printer.printInputGroup();
-        std::string group = this->getter.getString();
-        this->studentController.changeStudentGroup(tmpID, group);
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
+        {
+            this->printer.printInputGroup();
+            std::string group = this->getter.getString();
+            this->studentController.changeStudentGroup(tmpID, group);
+        }
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::settleStudent()
@@ -85,21 +99,24 @@ void StudentManager::settleStudent()
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
 
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        Student tmpStudent = this->studentController.getStudent(tmpID);
-        if (tmpStudent.getRoomID() == NONE)
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
         {
-            this->printer.printIDRoom();
-            int roomID = this->getter.getInt();
-            this->studentController.settleStudent(tmpStudent.getID(), roomID);
+            Student tmpStudent = this->studentController.getStudent(tmpID);
+            if (tmpStudent.getRoomID() == NOT_LIVING)
+            {
+                this->printer.printIDRoom();
+                int roomID = this->getter.getInt();
+                this->studentController.settleStudent(tmpStudent.getID(), roomID);
+            }
         }
-        else
-            this->printer.printSettleError();
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::evicStudent()
@@ -107,74 +124,80 @@ void StudentManager::evicStudent()
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
 
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        Student tmpStudent = this->studentController.getStudent(tmpID);
-        Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
-        if (tmpStudent.getRoomID() == NONE)
-            this->printer.printEvicError();
-        else
-            this->studentController.evicStudent(tmpStudent.getID());
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
+        {
+            Student tmpStudent = this->studentController.getStudent(tmpID);
+            Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
+            if (tmpStudent.getRoomID() != NONE)
+            {
+                this->studentController.evicStudent(tmpStudent.getID());
+                this->printer.printEvicOK();
+            }
+        }
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::giveStudentThing()
 {
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
-
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        this->printer.printMarkNumInput();
-        int markNumber = this->getter.getInt();
-        int tmpThingID = this->thingController.getThingIDByMarkNumber(markNumber);
-        if (tmpThingID != NONE)
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
         {
-            int owner = this->thingController.getCurrentOwner(tmpThingID);
-            if (owner == NONE)
+            this->printer.printMarkNumInput();
+            int markNumber = this->getter.getInt();
+            int tmpThingID = this->thingController.getThingIDByMarkNumber(markNumber);
+            if (tmpThingID != NONE)
             {
-                this->studentController.transferThing(tmpID, tmpThingID);
-                this->printer.printGiveOK();
+                int owner = this->thingController.getCurrentOwner(tmpThingID);
+                if (owner == NONE)
+                {
+                    this->studentController.transferThing(tmpID, tmpThingID);
+                    this->printer.printGiveOK();
+                }
             }
-            else
-                this->printer.printGiveError();
         }
-        else
-            this->printer.printThingNotFound();
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void StudentManager::returnStudentThing()
 {
     this->printer.printInputStudentNumber();
     std::string studentNumber = this->getter.getString();
-
-    int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
-    if (tmpID != NONE)
+    try
     {
-        this->printer.printMarkNumInput();
-        int markNumber = this->getter.getInt();
-        int tmpThingID = this->thingController.getThingIDByMarkNumber(markNumber);
-        if (tmpThingID != NONE)
+        int tmpID = this->studentController.getStudentIDByNumber(studentNumber);
+        if (tmpID != NONE)
         {
-            int owner = this->thingController.getCurrentOwner(tmpThingID);
-            if (owner == tmpID)
+            this->printer.printMarkNumInput();
+            int markNumber = this->getter.getInt();
+            int tmpThingID = this->thingController.getThingIDByMarkNumber(markNumber);
+            if (tmpThingID != NONE)
             {
-                this->studentController.returnThing(tmpID, tmpThingID);
-                this->printer.printReturnOK();
+                int owner = this->thingController.getCurrentOwner(tmpThingID);
+                if (owner == tmpID)
+                {
+                    this->studentController.returnThing(tmpID, tmpThingID);
+                    this->printer.printReturnOK();
+                }
             }
-            else
-                this->printer.printReturnError();
         }
-        else
-            this->printer.printThingNotFound();
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }

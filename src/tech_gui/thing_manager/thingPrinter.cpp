@@ -16,39 +16,19 @@ void ThingPrinter::printThingInfo(Thing thing, Room tmpRoom)
     std::cout << std::endl;
 }
 
-void ThingPrinter::printInputStudentNumber()
-{
-    std::cout << NUMBER_INPUT_MESSAGE;
-}
-
-void ThingPrinter::printStudentNotFound()
-{
-    std::cout << STUDENT_NOT_FOUND;
-}
-
 void ThingPrinter::printMarkInput()
 {
-    std::cout << MARK_INPUT;
+    std::cout << MARK_NUM_INPUT_MESSAGE;
 }
 
 void ThingPrinter::printTypeInput()
 {
-    std::cout << TYPE_INPUT;
+    std::cout << TYPE_INPUT_MESSAGE;
 }
 
 void ThingPrinter::printRoomIDInput()
 {
-    std::cout << ROOM_ID_INPUT;
-}
-
-void ThingPrinter::printThingNotFound()
-{
-    std::cout << THING_IS_NOT_FOUND;
-}
-
-void ThingPrinter::printRoomNotFound()
-{
-    std::cout << ROOM_NOT_FOUND;
+    std::cout << ROOM_ID_INPUT_MESSAGE;
 }
 
 void ThingPrinter::printAddOK()
@@ -56,7 +36,12 @@ void ThingPrinter::printAddOK()
     std::cout << ADD_OK;
 }
 
-void ThingPrinter::printAddError()
+void ThingPrinter::printException(const std::exception &e)
 {
-    std::cout << ADD_ERROR;
+    std::cout << e.what() << std::endl;
+}
+
+void ThingPrinter::printInputStudentNumber()
+{
+    std::cout << NUMBER_INPUT_MESSAGE;
 }

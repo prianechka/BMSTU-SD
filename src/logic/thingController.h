@@ -4,6 +4,7 @@
 #include "../db/thingRepo.h"
 #include "../objects/room.h"
 #include "../objects/thing.h"
+#include "../db/exceptions.h"
 
 class ThingController
 {

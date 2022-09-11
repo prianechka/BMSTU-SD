@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <functional>
 #include "../../objects/consts.h"
+#include "../../db/exceptions.h"
 
 class StudentGetter
 {

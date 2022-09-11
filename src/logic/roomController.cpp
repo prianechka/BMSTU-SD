@@ -21,17 +21,37 @@ std::vector<Room> RoomController::getRooms()
 
 Room RoomController::getRoom(int id)
 {
-    return this->Repository->getRoom(id);
+    Room tmpRoom = this->Repository->getRoom(id);
+    if (tmpRoom.getID() == NONE)
+        throw RoomNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return tmpRoom;
 }
 
 void RoomController::deleteRoom(int id)
 {
     Room tmpRoom = this->Repository->getRoom(id);
-    if (tmpRoom.getID() >= 0)
-        this->Repository->deleteRoom(id);
+    if (tmpRoom.getID() >= NONE)
+    {
+        try
+        {
+            this->Repository->deleteRoom(id);
+            Room checkRoom = this->Repository->getRoom(id);
+            if (checkRoom.getID() != NONE)
+                throw BadRoomDeleteException(__FILE__, typeid(*this).name(), __LINE__);
+        }
+        catch (RoomNotFoundException)
+        {}
+    }
+    else
+        throw RoomNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
 }
 
 std::vector<Thing> RoomController::getRoomThings(int id)
 {
-    return this->Repository->getRoomThings(id);
+    Room tmpRoom = this->Repository->getRoom(id);
+    if (tmpRoom.getID() == NONE)
+        throw RoomNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return this->Repository->getRoomThings(id);
 }

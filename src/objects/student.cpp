@@ -22,7 +22,7 @@ Student::Student()
     this->settleDate = CUR_TIME;
     this->studentGroup = EMPTY;
     this->studentNumber = EMPTY;
-    this->roomID = NONE;
+    this->roomID = NOT_LIVING;
 }
 
 Student::~Student()

@@ -39,14 +39,19 @@ void ThingManager::viewStudentThings()
 {
     this->printer.printInputStudentNumber();
     std::string studNumber = this->getter.getString();
-    int id = this->studentController.getStudentIDByNumber(studNumber);
-    if (id != NONE)
+    try
     {
-        std::vector<Thing> things = this->studentController.getStudentThings(id);
-        handleThings(things);
+        int id = this->studentController.getStudentIDByNumber(studNumber);
+        if (id != NONE)
+        {
+            std::vector<Thing> things = this->studentController.getStudentThings(id);
+            handleThings(things);
+        }
     }
-    else
-        this->printer.printStudentNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void ThingManager::addNewThing()
@@ -56,41 +61,42 @@ void ThingManager::addNewThing()
 
     this->printer.printMarkInput();
     int markNumber = this->getter.getInt();
-
-    this->thingController.addThing(markNumber, type);
-    int id = this->thingController.getThingIDByMarkNumber(markNumber);
-    if (id != NONE)
+    try
+    {
+        this->thingController.addThing(markNumber, type);
         this->printer.printAddOK();
-    else
-        this->printer.printAddOK();
+    }
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 
 void ThingManager::transferThing()
 {
     this->printer.printMarkInput();
-    int markNumber = this->getter.getInt();
-
-    int thingID = this->thingController.getThingIDByMarkNumber(markNumber);
-    if (thingID != NONE)
+    try
     {
-        Thing tmpThing = this->thingController.getThing(thingID);
-
-        this->printer.printRoomIDInput();
-        int dstRoomID = this->getter.getInt();
-        Room tmpRoom = roomController.getRoom(dstRoomID);
-        if (tmpRoom.getID() != NONE)
+        int markNumber = this->getter.getInt();
+        int thingID = this->thingController.getThingIDByMarkNumber(markNumber);
+        if (thingID != NONE)
         {
-            thingController.transferThing(thingID, tmpRoom.getID(), dstRoomID);
-            int id = this->thingController.getThingRoom(thingID);
-            if (id == dstRoomID)
-                this->printer.printAddOK();
-            else
-                this->printer.printAddError();
+            Thing tmpThing = this->thingController.getThing(thingID);
+            this->printer.printRoomIDInput();
+            int dstRoomID = this->getter.getInt();
+            Room tmpRoom = roomController.getRoom(dstRoomID);
+            if (tmpRoom.getID() != NONE)
+            {
+                thingController.transferThing(thingID, tmpRoom.getID(), dstRoomID);
+                int id = this->thingController.getThingRoom(thingID);
+                if (id == dstRoomID)
+                    this->printer.printAddOK();
+            }
         }
-        else
-            this->printer.printRoomNotFound();
     }
-    else
-        this->printer.printThingNotFound();
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
 }
 

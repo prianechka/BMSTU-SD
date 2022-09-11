@@ -18,5 +18,7 @@ int StudentGetter::getInt()
     std::cin >> str;
     if (check_is_number(str))
         result = std::stoi(str);
+    else
+        throw InputIntErrorException(__FILE__, typeid(*this).name(), __LINE__);
     return result;
 }
