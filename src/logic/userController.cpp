@@ -17,20 +17,31 @@ UserController::UserController(UserController &controller)
 
 int UserController::getUserId(std::string login)
 {
-    return this->repository->getUserId(login);
+    int id = this->repository->getUserId(login);
+    if (id == NONE)
+        throw UserNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return id;
 }
 
 User UserController::getUser(int id)
 {
-    return this->repository->getUser(id);
+    User tmpUser = this->repository->getUser(id);
+    if (tmpUser.getId() == NONE)
+        throw UserNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return tmpUser;
 }
 
 void UserController::addUser(std::string login, std::string password, Levels privelegeLevel)
 {
-    return this->repository->addUser(login, password, privelegeLevel);
+    this->repository->addUser(login, password, privelegeLevel);
+    int id = this->repository->getUserId(login);
+    if (id == NONE)
+        throw UserAddErrorException(__FILE__, typeid(*this).name(), __LINE__);
 }
 
 bool UserController::userExists(std::string login)
 {
-    return this->repository->getUserId(login) >= 0;
+    return this->repository->getUserId(login) > NONE;
 }

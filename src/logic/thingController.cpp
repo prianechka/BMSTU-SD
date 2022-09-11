@@ -12,6 +12,9 @@ ThingController::~ThingController(){}
 void ThingController::addThing(int markNumber, std::string thingType)
 {
     this->repository->addThing(ThingDTO(markNumber, thingType));
+    int id = this->repository->getThingIDByMarkNumber(markNumber);
+    if (id == NONE)
+        throw BadThingAddException(__FILE__, typeid(*this).name(), __LINE__);
 }
 
 std::vector<Thing> ThingController::getThings()
@@ -26,7 +29,7 @@ std::vector<Thing> ThingController::getFreeThings()
 
     for (Thing tmpThing : allThings)
     {
-        if (tmpThing.getOwnerID() == -1)
+        if (tmpThing.getOwnerID() == NONE)
             result.push_back(tmpThing);
     }
     return result;
@@ -34,35 +37,67 @@ std::vector<Thing> ThingController::getFreeThings()
 
 Thing ThingController::getThing(int id)
 {
-    return this->repository->getThing(id);
+    Thing tmpThing = this->repository->getThing(id);
+    if (tmpThing.getID() == NONE)
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return tmpThing;
 }
 
 void ThingController::deleteThing(int id)
 {
     Thing tmpThing = this->getThing(id);
-    if (tmpThing.getID() >= 0)
+    if (tmpThing.getID() >= NONE)
         this->repository->deleteThing(id);
+    else
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
 }
 
 
 int ThingController::getThingRoom(int id)
 {
-    return this->repository->getThing(id).getRoomID();
+    Thing tmpThing = this->repository->getThing(id);
+    if (tmpThing.getID() == NONE)
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return tmpThing.getRoomID();
 }
 
 void ThingController::transferThing(int id, int srcRoomID, int dstRoomID)
 {
-    if (srcRoomID == NONE)
-        srcRoomID = NOT_FOUND;
-    this->repository->transferThing(id, srcRoomID, dstRoomID);
+    Thing tmpThing = this->repository->getThing(id);
+    if (tmpThing.getID() == NONE)
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+    {
+        if (tmpThing.getRoomID() != srcRoomID)
+            throw ThingNotRoomException(__FILE__, typeid(*this).name(), __LINE__);
+        else
+        {
+            if (dstRoomID == NONE)
+                throw RoomNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+            this->repository->transferThing(id, srcRoomID, dstRoomID);
+            tmpThing = this->repository->getThing(id);
+            if (tmpThing.getRoomID() != dstRoomID)
+                throw ThingBadTransferException(__FILE__, typeid(*this).name(), __LINE__);
+        }
+    }
 }
 
 int ThingController::getCurrentOwner(int id)
 {
-    return this->repository->getThing(id).getOwnerID();
+    Thing tmpThing = this->repository->getThing(id);
+    if (tmpThing.getID() == NONE)
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return tmpThing.getOwnerID();
 }
 
 int ThingController::getThingIDByMarkNumber(int markNumber)
 {
-    return this->repository->getThingIDByMarkNumber(markNumber);
+    int id = this->repository->getThingIDByMarkNumber(markNumber);
+    if (id == NONE)
+        throw ThingNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    else
+        return id;
 }
