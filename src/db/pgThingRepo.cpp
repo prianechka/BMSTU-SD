@@ -142,7 +142,7 @@ int PgThingRepo::getThingIDByMarkNumber(int markNumber)
     {
         if (this->connection->is_open())
         {
-            std::string sql = PostgreSQLGetThing().get_text(markNumber);
+            std::string sql = PostgreSQLGetThingID().get_text(markNumber);
             pqxx::work curConnect(*this->connection);
             pqxx::result result = curConnect.exec(sql);
             if (result.size() > 0)

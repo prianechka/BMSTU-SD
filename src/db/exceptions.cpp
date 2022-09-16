@@ -3,8 +3,7 @@
 BaseException::BaseException(std::string fileName, std::string className,
                              int currentLine, std::string information)
 {
-   information = "\nFile: " + fileName + "\nClass: " + className + "\nAt line: " +
-           std::to_string(currentLine) + "About error: " + information;
+   this->information = information;
 }
 
 const char *BaseException::what() const noexcept

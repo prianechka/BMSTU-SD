@@ -14,6 +14,13 @@ void StudentController::addStudent(std::string name, std::string surname, std::s
 {
     if (webID < 0)
         throw UserNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    if (name.length() < 1 or surname.length() < 1 or group.length() < 1 or
+            studentNumber.length() < 1)
+        throw StudentAddErrorException(__FILE__, typeid (*this).name(), __LINE__);
+    std::vector<Student> students = this->repository->getAllStudents();
+    for (size_t i = 0; i < students.size(); i++)
+        if (students[i].getStudentNumber() == studentNumber)
+            throw StudentAddErrorException(__FILE__, typeid(*this).name(), __LINE__);
     this->repository->addStudent(StudentDTO(name, surname, group, studentNumber), webID);
     int id = this->repository->getStudentID(studentNumber);
     if (id == NONE)
@@ -77,7 +84,9 @@ void StudentController::settleStudent(int studentID, int roomID)
             throw SettleErrorException(__FILE__, typeid(*this).name(), __LINE__);
     }
     else
+    {
         throw BadSettleException(__FILE__, typeid(*this).name(), __LINE__);
+    }
 }
 
 void StudentController::evicStudent(int studentID)
@@ -86,12 +95,12 @@ void StudentController::evicStudent(int studentID)
     if (tmpStudent.getID() == NONE)
         throw StudentNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
     int roomID = tmpStudent.getRoomID();
-    if (roomID != NONE)
+    if (roomID != NOT_LIVING)
     {
         this->repository->transferStudent(studentID, roomID, RET);
         tmpStudent = this->repository->getStudent(studentID);
-        if (tmpStudent.getRoomID() != NONE)
-            throw SettleErrorException(__FILE__, typeid(*this).name(), __LINE__);
+        if (tmpStudent.getRoomID() != NOT_LIVING)
+            throw EvicErrorException(__FILE__, typeid(*this).name(), __LINE__);
     }
     else
         throw BadEvicException(__FILE__, typeid(*this).name(), __LINE__);
@@ -166,5 +175,8 @@ void StudentController::transferThing(int studentID, int thingID)
 
 void StudentController::returnThing(int studentID, int thingID)
 {
+    Student tmpStudent = this->repository->getStudent(studentID);
+    if (tmpStudent.getID() == NONE)
+        throw StudentNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
     this->repository->transferThing(studentID, thingID, RET);
 }

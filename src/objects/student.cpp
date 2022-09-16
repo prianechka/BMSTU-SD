@@ -53,6 +53,11 @@ int Student::getID()
     return this->id;
 }
 
+int Student::getAccID()
+{
+    return this->idWebAcc;
+}
+
 int Student::getRoomID()
 {
     return this->roomID;

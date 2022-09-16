@@ -29,7 +29,7 @@ std::string PostgreSQLGetAllStudents::get_text()
 
 std::string PostgreSQLGetStudentID::get_text(std::string studentNumber)
 {
-    return "SELECT S.studentid FROM PPO.Student as S WHERE StudentNumber = " + studentNumber + ";";
+    return "SELECT S.studentid FROM PPO.Student as S WHERE StudentNumber = '" + studentNumber + "';";
 }
 
 std::string PostgreSQLGetStudent::get_text(int id)
@@ -111,6 +111,12 @@ std::string PostgreSQLGetThing::get_text(int id)
 {
     return "SELECT T.thingid, T.marknumber, T.creationdate, T.thingtype, PPO.FindStudent(T.thingId),"\
             "PPO.FindRoom(T.thingid) FROM PPO.Thing as T WHERE T.thingid = " + std::to_string(id) + ";";
+}
+
+std::string PostgreSQLGetThingID::get_text(int marknumber)
+{
+    return "SELECT T.thingid "\
+           "FROM PPO.Thing as T WHERE T.marknumber = " + std::to_string(marknumber) + ";";
 }
 
 std::string PostgreSQLGetThings::get_text()

@@ -11,6 +11,10 @@ ThingController::~ThingController(){}
 
 void ThingController::addThing(int markNumber, std::string thingType)
 {
+    std::vector<Thing> things = this->repository->getThings();
+    for (size_t i = 0; i < things.size(); i++)
+        if (things[i].getMarkNumber() == markNumber)
+            throw BadThingAddException(__FILE__, typeid(*this).name(), __LINE__);
     this->repository->addThing(ThingDTO(markNumber, thingType));
     int id = this->repository->getThingIDByMarkNumber(markNumber);
     if (id == NONE)
