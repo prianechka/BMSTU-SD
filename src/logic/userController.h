@@ -3,6 +3,7 @@
 
 #include "../objects/user.h"
 #include "../db/userRepo.h"
+#include "../db/exceptions.h"
 
 class UserController
 {
@@ -10,6 +11,8 @@ private:
     InterfaceUserRepo *repository;
 public:
     UserController(InterfaceUserRepo &repository);
+    UserController(UserController &controller);
+    UserController();
     ~UserController();
 
     int getUserId(std::string login);

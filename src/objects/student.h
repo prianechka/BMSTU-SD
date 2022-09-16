@@ -32,6 +32,7 @@ public:
 
     int getRoomID();
     int getID();
+    int getAccID();
 
     void setRoomID(int roomID);
     void setGroup(std::string newGroup);

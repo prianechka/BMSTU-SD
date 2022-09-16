@@ -4,6 +4,7 @@
 #include "../objects/room.h"
 #include "../objects/thing.h"
 #include "../db/roomRepo.h"
+#include "../db/exceptions.h"
 
 class RoomController
 {
@@ -11,6 +12,7 @@ private:
     InterfaceRoomRepo *Repository;
 public:
     RoomController(InterfaceRoomRepo &Repository);
+    RoomController();
     ~RoomController();
 
     void addRoom(std::string roomType, int number);

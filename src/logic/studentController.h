@@ -4,6 +4,7 @@
 #include "../objects/student.h"
 #include "../objects/thing.h"
 #include "../db/studentRepo.h"
+#include "../db/exceptions.h"
 #include <vector>
 
 class StudentController
@@ -13,9 +14,10 @@ private:
 
 public:
     StudentController(InterfaceStudentRepo &repository);
+    StudentController();
     ~StudentController();
 
-    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber);
+    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber, int accID);
     std::vector<Student> getAllStudents();
     int getStudentIDByNumber(std::string studentNumber);
     Student getStudent(int id);

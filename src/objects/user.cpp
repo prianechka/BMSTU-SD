@@ -13,7 +13,7 @@ User::User()
     this->id = NONE;
     this->login = EMPTY;
     this->password = EMPTY;
-    this->privelegeLevel = NOT_AUTH;
+    this->privelegeLevel = NON_AUTH;
 }
 
 User::~User()
@@ -32,4 +32,9 @@ int User::getId()
 std::string User::getLogin()
 {
     return this->login;
+}
+
+std::string User::getPassword()
+{
+    return this->password;
 }

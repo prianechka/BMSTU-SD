@@ -22,7 +22,7 @@ Student::Student()
     this->settleDate = CUR_TIME;
     this->studentGroup = EMPTY;
     this->studentNumber = EMPTY;
-    this->roomID = NONE;
+    this->roomID = NOT_LIVING;
 }
 
 Student::~Student()
@@ -51,6 +51,11 @@ std::string Student::getStudentNumber()
 int Student::getID()
 {
     return this->id;
+}
+
+int Student::getAccID()
+{
+    return this->idWebAcc;
 }
 
 int Student::getRoomID()
