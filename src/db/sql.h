@@ -144,6 +144,14 @@ public:
     std::string get_text(int id);
 };
 
+class PostgreSQLGetThingID
+{
+public:
+    PostgreSQLGetThingID() = default;
+    ~PostgreSQLGetThingID() = default;
+    std::string get_text(int id);
+};
+
 class PostgreSQLDeleteThing
 {
 public:

@@ -40,6 +40,7 @@ private:
     RoomManager roomManager;
 
     int id;
+    std::string studNumber;
     void handleReq(REQUEST_KEYS key);
 };
 

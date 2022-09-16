@@ -38,6 +38,8 @@ void StudentManager::addNewStudent()
     try
     {
         this->userController.addUser(login, password, STUDENT);
+        int webID = this->userController.getUserId(login);
+        this->studentController.addStudent(surname, name, group, studNumber, webID);
     }
     catch (const std::exception &e)
     {
@@ -56,9 +58,14 @@ void StudentManager::viewStudent()
         if (tmpID != NONE)
         {
             Student tmpStudent = this->studentController.getStudent(tmpID);
-            Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
             this->printer.printStudent(tmpStudent);
-            this->printer.printStudentRoom(studentRoom.getRoomNumber());
+            if (tmpStudent.getRoomID() != NOT_LIVING)
+            {
+                Room studentRoom = this->roomController.getRoom(tmpStudent.getRoomID());
+                this->printer.printStudentRoom(studentRoom.getRoomNumber());
+            }
+            else
+                this->printer.printStudentRoom(NOT_LIVING);
         }
     }
     catch (const std::exception &e)
@@ -162,8 +169,14 @@ void StudentManager::giveStudentThing()
                 if (owner == NONE)
                 {
                     this->studentController.transferThing(tmpID, tmpThingID);
-                    this->printer.printGiveOK();
+                    owner = this->thingController.getCurrentOwner(tmpThingID);
+                    if (owner == tmpID)
+                        this->printer.printGiveOK();
+                    else
+                        throw ThingBadTransferException(__FILE__, typeid(*this).name(), __LINE__);
                 }
+                else
+                    throw ThingBadTransferException(__FILE__, typeid(*this).name(), __LINE__);
             }
         }
     }
@@ -191,6 +204,9 @@ void StudentManager::returnStudentThing()
                 if (owner == tmpID)
                 {
                     this->studentController.returnThing(tmpID, tmpThingID);
+                    owner = this->thingController.getCurrentOwner(tmpThingID);
+                    if (owner == tmpID)
+                        throw ThingBadTransferException(__FILE__, typeid(*this).name(), __LINE__);
                     this->printer.printReturnOK();
                 }
             }
@@ -200,4 +216,19 @@ void StudentManager::returnStudentThing()
     {
         this->printer.printException(e);
     }
+}
+
+std::string StudentManager::getStudentByWebID(int webID)
+{
+    std::string result = "";
+    std::vector<Student> students = this->studentController.getAllStudents();
+    for (size_t i = 0; i < students.size(); i++)
+    {
+        if (students[i].getAccID() == webID)
+        {
+            result = students[i].getStudentNumber();
+            break;
+        }
+    }
+    return result;
 }

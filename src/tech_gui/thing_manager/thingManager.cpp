@@ -87,7 +87,7 @@ void ThingManager::transferThing()
             Room tmpRoom = roomController.getRoom(dstRoomID);
             if (tmpRoom.getID() != NONE)
             {
-                thingController.transferThing(thingID, tmpRoom.getID(), dstRoomID);
+                thingController.transferThing(thingID, tmpThing.getRoomID(), dstRoomID);
                 int id = this->thingController.getThingRoom(thingID);
                 if (id == dstRoomID)
                     this->printer.printAddOK();

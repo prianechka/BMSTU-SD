@@ -25,6 +25,7 @@ public:
     void returnStudentThing();
     void giveStudentThing();
     void viewAllRooms();
+    std::string getStudentByWebID(int webID);
 private:
     StudentGetter getter;
     StudentPrinter printer;

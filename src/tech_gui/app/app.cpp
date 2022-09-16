@@ -7,6 +7,7 @@ App::App(AuthManager &authManager, StudentManager &studentManager,
     this->req_handler = RequestHandler();
     this->state = AppState();
     this->id = NONE;
+    this->studNumber = "";
     this->studentManager = studentManager;
     this->authManager = authManager;
     this->thingManager = thingManager;
