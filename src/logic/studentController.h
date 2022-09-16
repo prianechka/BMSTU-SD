@@ -17,7 +17,7 @@ public:
     StudentController();
     ~StudentController();
 
-    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber, int webID);
+    void addStudent(std::string surname, std::string name, std::string group, std::string studentNumber, int accID);
     std::vector<Student> getAllStudents();
     int getStudentIDByNumber(std::string studentNumber);
     Student getStudent(int id);
