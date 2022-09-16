@@ -10,9 +10,9 @@ StudentController::StudentController(){}
 StudentController::~StudentController() {};
 
 void StudentController::addStudent(std::string name, std::string surname, std::string group,
-                                   std::string studentNumber, int webID)
+                                   std::string studentNumber, int accID)
 {
-    if (webID < 0)
+    if (accID < 0)
         throw UserNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
     if (name.length() < 1 or surname.length() < 1 or group.length() < 1 or
             studentNumber.length() < 1)
@@ -21,7 +21,7 @@ void StudentController::addStudent(std::string name, std::string surname, std::s
     for (size_t i = 0; i < students.size(); i++)
         if (students[i].getStudentNumber() == studentNumber)
             throw StudentAddErrorException(__FILE__, typeid(*this).name(), __LINE__);
-    this->repository->addStudent(StudentDTO(name, surname, group, studentNumber), webID);
+    this->repository->addStudent(StudentDTO(name, surname, group, studentNumber), accID);
     int id = this->repository->getStudentID(studentNumber);
     if (id == NONE)
         throw StudentAddErrorException(__FILE__, typeid(*this).name(), __LINE__);
