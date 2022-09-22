@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtWidgets>
 #include <QMessageBox>
+#include <fstream>
 #include "../authManager/GuiAuthManager.h"
 #include "../studentManager/GUIstudentManager.h"
 #include "../thingManager/GUIthingManager.h"
@@ -11,6 +12,7 @@
 #include "commwindow.h"
 #include "suppwindow.h"
 #include "studentwindow.h"
+#include "../log.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AuthWindow;

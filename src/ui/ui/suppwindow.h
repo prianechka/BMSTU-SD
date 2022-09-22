@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <fstream>
 #include "../authManager/GuiAuthManager.h"
 #include "../studentManager/GUIstudentManager.h"
 #include "../thingManager/GUIthingManager.h"
 #include "../roomManager/GUIroomManager.h"
 #include "authwindow.h"
+#include "../log.h"
 
 namespace Ui {
 class suppwindow;

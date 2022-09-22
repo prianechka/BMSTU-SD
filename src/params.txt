@@ -1,0 +1,5 @@
+bob
+localhost
+ppo
+admin
+5432

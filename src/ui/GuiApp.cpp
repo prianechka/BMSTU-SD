@@ -1,38 +1,32 @@
-#include "ui/authwindow.h"
-#include "ui/commwindow.h"
-#include "ui/suppwindow.h"
-#include "ui/studentwindow.h"
-#include "../db/pgRoomRepo.h"
-#include <QApplication>
+#include "GuiApp.h"
 
-/*
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    ConnectionParams connectParams = ConnectionParams("bob", "localhost", "ppo", "admin", 5432);
+    ConfigManager configManager;
+    std::string DB = configManager.getDB();
+    ConnectionParams connectParams;
+    if (DB == "postgres")
+    {
+        connectParams = configManager.getParams();
+        PgUserRepo userRepo = PgUserRepo(connectParams);
+        PgStudentRepo studentRepo = PgStudentRepo(connectParams);
+        PgRoomRepo roomRepo = PgRoomRepo(connectParams);
+        PgThingRepo thingRepo = PgThingRepo(connectParams);
 
-    PgUserRepo userRepo = PgUserRepo(connectParams);
-    UserController userController(userRepo);
+        StudentController studentController(studentRepo);
+        RoomController roomController(roomRepo);
+        ThingController thingController(thingRepo);
+        UserController userController(userRepo);
+        GUIStudentManager studentManager(studentController, userController,
+                                          roomController, thingController);
+        GUIThingManager thingManager(thingController, studentController, roomController);
+        GUIRoomManager roomManager(roomController);
+        GUIAuthManager manager(userController);
 
-    PgStudentRepo studentRepo = PgStudentRepo(connectParams);
-    StudentController studentController(studentRepo);
-
-    PgRoomRepo roomRepo = PgRoomRepo(connectParams);
-    RoomController roomController(roomRepo);
-
-    PgThingRepo thingRepo = PgThingRepo(connectParams);
-    ThingController thingController(thingRepo);
-
-    GUIStudentManager studentManager(studentController, userController,
-                                  roomController, thingController);
-
-    GUIThingManager thingManager(thingController, studentController, roomController);
-    GUIRoomManager roomManager(roomController);
-    GUIAuthManager manager(userController);
-
-    AuthWindow w(manager, studentManager, thingManager, roomManager);
-    w.show();
-    return a.exec();
+        AuthWindow w(manager, studentManager, thingManager, roomManager);
+        w.show();
+        return a.exec();
+    }
 }
-*/

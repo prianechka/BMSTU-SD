@@ -28,6 +28,7 @@ void StudentWindow::on_enter_clicked()
     QMessageBox messageBox;
     if (this->ui->r1->isChecked())
     {
+        LogAction().log("Студент хочет посмотреть список всех студентов");
         ui->tableWidget->clear();
         ui->tableWidget->setRowCount(0);
         ui->tableWidget->setColumnCount(4); // Указываем число колонок
@@ -55,6 +56,7 @@ void StudentWindow::on_enter_clicked()
     }
     else if (this->ui->r2->isChecked())
     {
+        LogAction().log("Студент хочет посмотреть комнаты");
         std::vector<Room> rooms = this->roomManager.getRooms();
         ui->tableWidget->setColumnCount(3); // Указываем число колонок
         ui->tableWidget->setRowCount(0);
@@ -76,6 +78,7 @@ void StudentWindow::on_enter_clicked()
     }
     else if (this->ui->r3->isChecked())
     {
+        LogAction().log("Студент хочет посмотреть свои вещи");
         ui->tableWidget->clear();
         try
         {
@@ -111,12 +114,14 @@ void StudentWindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r4->isChecked())
     {
+        LogAction().log("Студент хочет переместить вещь");
         try
         {
             int roomID = this->ui->roomEdit->toPlainText().toInt();
@@ -126,6 +131,7 @@ void StudentWindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }

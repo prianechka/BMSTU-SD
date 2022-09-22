@@ -21,7 +21,6 @@ AuthWindow::~AuthWindow()
     delete ui;
 }
 
-
 Levels AuthWindow::on_enter_clicked()
 {
     QMessageBox messageBox;
@@ -29,10 +28,12 @@ Levels AuthWindow::on_enter_clicked()
     std::string login = this->ui->loginEdit->toPlainText().toStdString();
     std::string password = this->ui->passwordEdit->toPlainText().toStdString();
     try {
+        LogAction().log("Попытка авторизации");
         result = this->authManager.TryToAuthorize(login, password);
         messageBox.information(0, "Успех!", "Удалось успешно войти в систему!");
         if (result == COMEND)
         {
+            LogAction().log("Авторизация пользователя с ролью комендант");
             this->close();
             CommWindow *w = new CommWindow(this->authManager, this->studentManager,
                                           this->thingManager, this->roomManager);
@@ -40,6 +41,7 @@ Levels AuthWindow::on_enter_clicked()
         }
         else if (result == SUPPLY)
         {
+            LogAction().log("Авторизация пользователя с ролью завхоз");
             this->close();
             suppwindow *w = new suppwindow(this->authManager, this->studentManager,
                                            this->thingManager, this->roomManager);
@@ -47,6 +49,7 @@ Levels AuthWindow::on_enter_clicked()
         }
         else if (result == STUDENT)
         {
+            LogAction().log("Авторизация пользователя с ролью студент");
             this->close();
             int webID = this->authManager.GetUserID(login);
             std::string studentNumber = this->studentManager.getStudentByWebID(webID);
@@ -55,6 +58,7 @@ Levels AuthWindow::on_enter_clicked()
             w->show();
         }
     }  catch (const std::exception &e) {
+        LogAction().log(std::string("Возникла ошибка:") + e.what());
         messageBox.critical(0, "Error", e.what());
         messageBox.setFixedSize(500,200);
     }

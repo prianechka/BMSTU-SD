@@ -3,12 +3,14 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <fstream>
 #include "../authManager/GuiAuthManager.h"
 #include "../studentManager/GUIstudentManager.h"
 #include "../thingManager/GUIthingManager.h"
 #include "../roomManager/GUIroomManager.h"
 #include "commwindow.h"
 #include "suppwindow.h"
+#include "../log.h"
 
 namespace Ui {
 class StudentWindow;

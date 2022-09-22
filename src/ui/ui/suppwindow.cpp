@@ -26,6 +26,7 @@ void suppwindow::on_enter_clicked()
     QMessageBox messageBox;
     if (this->ui->r1->isChecked())
     {
+        LogAction().log("Пользователь хочет добавить вещь");
         int markNumber = this->ui->markEdit->toPlainText().toInt();
         std::string type = this->ui->typeEdit->toPlainText().toStdString();
         try
@@ -35,12 +36,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r2->isChecked())
     {
+        LogAction().log("Пользователь хочет выдать вещь студенту");
         int markNumber = this->ui->markEdit->toPlainText().toInt();
         std::string studNumber = this->ui->studEdit->toPlainText().toStdString();
         try
@@ -50,12 +53,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r3->isChecked())
     {
+        LogAction().log("Пользователь хочет забрать вещь у студента");
         int markNumber = this->ui->markEdit->toPlainText().toInt();
         std::string studNumber = this->ui->studEdit->toPlainText().toStdString();
         try
@@ -65,12 +70,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r4->isChecked())
     {
+        LogAction().log("Пользователь хочет посмотреть студентов");
         ui->tableWidget->clear();
         ui->tableWidget->setRowCount(0);
         ui->tableWidget->setColumnCount(4); // Указываем число колонок
@@ -98,6 +105,7 @@ void suppwindow::on_enter_clicked()
     }
     else if (this->ui->r5->isChecked())
     {
+        LogAction().log("Пользователь хочет посмотреть комнаты");
         std::vector<Room> rooms = this->roomManager.getRooms();
         ui->tableWidget->setColumnCount(3); // Указываем число колонок
         ui->tableWidget->setRowCount(0);
@@ -119,6 +127,7 @@ void suppwindow::on_enter_clicked()
     }
     else if (this->ui->r6->isChecked())
     {
+        LogAction().log("Пользователь хочет посмотреть вещи");
         ui->tableWidget->clear();
         try
         {
@@ -154,12 +163,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r7->isChecked())
     {
+        LogAction().log("Пользователь хочет посмотреть свободные вещи");
         ui->tableWidget->clear();
         try
         {
@@ -193,12 +204,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r8->isChecked())
     {
+        LogAction().log("Пользователь хочет переместить вещь");
         try
         {
             int roomID = this->ui->roomEdit->toPlainText().toInt();
@@ -208,12 +221,14 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
     }
     else if (this->ui->r9->isChecked())
     {
+        LogAction().log("Пользователь хочет посмотреть вещи студента");
         ui->tableWidget->clear();
         try
         {
@@ -250,6 +265,7 @@ void suppwindow::on_enter_clicked()
         }
         catch (const std::exception &e)
         {
+            LogAction().log(std::string("Возникла ошибка:") + e.what());
             messageBox.critical(0, "Ошибка!", e.what());
             messageBox.setFixedSize(500,200);
         }
@@ -259,6 +275,7 @@ void suppwindow::on_enter_clicked()
 
 void suppwindow::on_enter_2_clicked()
 {
+    LogAction().log("Пользователь выходит из аккаунта");
     this->close();
     AuthWindow *w = new AuthWindow(authManager, studentManager, thingManager, roomManager);
     w->show();
