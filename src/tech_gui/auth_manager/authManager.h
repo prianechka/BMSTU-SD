@@ -15,6 +15,7 @@ public:
     bool isAuthorized(std::string login);
     Levels TryToAuthorize();
     int GetUserID(std::string login);
+    std::string getLogin();
 private:
     AuthGetter getter;
     AuthPrinter printer;

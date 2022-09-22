@@ -19,6 +19,7 @@ public:
     void viewStudentThings();
     void addNewThing();
     void transferThing();
+    void viewThingsForStudent(std::string studentNumber);
 private:
     ThingController thingController;
     StudentController studentController;

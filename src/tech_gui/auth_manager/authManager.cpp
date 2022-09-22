@@ -46,3 +46,25 @@ Levels AuthManager::TryToAuthorize()
     }
     return result;
 }
+
+int AuthManager::GetUserID(std::string login)
+{
+    int result = NONE;
+    try
+    {
+        if (this->controller.userExists(login))
+            result = this->controller.getUserId(login);
+        else
+            throw LoginNotFoundException(__FILE__, typeid(*this).name(), __LINE__);
+    }
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
+    return result;
+}
+
+std::string AuthManager::getLogin()
+{
+    return this->login;
+}

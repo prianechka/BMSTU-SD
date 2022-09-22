@@ -54,6 +54,23 @@ void ThingManager::viewStudentThings()
     }
 }
 
+void ThingManager::viewThingsForStudent(std::string studentNumber)
+{
+    try
+    {
+        int id = this->studentController.getStudentIDByNumber(studentNumber);
+        if (id != NONE)
+        {
+            std::vector<Thing> things = this->studentController.getStudentThings(id);
+            handleThings(things);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        this->printer.printException(e);
+    }
+}
+
 void ThingManager::addNewThing()
 {
     this->printer.printTypeInput();

@@ -49,8 +49,12 @@ void App::handleReq(REQUEST_KEYS key)
             Levels role = this->authManager.TryToAuthorize();
             switch (role) {
             case STUDENT:
+            {
                 this->state.toStudentAuth();
+                int userID = this->authManager.GetUserID(this->authManager.getLogin());
+                this->studNumber = this->studentManager.getStudentByWebID(userID);
                 break;
+            }
             case SUPPLY:
                 this->state.toSupplyAuth();
                 break;
@@ -171,13 +175,18 @@ void App::handleReq(REQUEST_KEYS key)
         if (this->state.isSupplyAuth() || this->state.isCommendAuth())
         {
             this->thingManager.viewStudentThings();
-        } else {
+        }
+        else if (this->state.isStudentAuth())
+        {
+            this->thingManager.viewThingsForStudent(this->studNumber);
+        }
+        else {
             this->printer.print_not_role();
         }
         break;
 
     case VIEW_ROOMS:
-        if (this->state.isSupplyAuth() || this->state.isCommendAuth())
+        if (this->state.isSupplyAuth() || this->state.isCommendAuth() || this->state.isStudentAuth())
         {
             this->roomManager.printAllRooms();
         } else {
