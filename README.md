@@ -30,6 +30,12 @@
 ## UML-диаграмма
 ![UML](docs/img/uml.jpg)
 
+## Полная верхнеуровневая диаграмма
+![UML](docs/img/globalUML.jpg)
+
+## UML-диаграмма всех классов
+![UML](docs/img/all_classes.jpg)
+
 ## Технологический стек
 1. Desktop App
 2. BackEnd - C++
